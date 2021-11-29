@@ -1,8 +1,7 @@
 *.class
-/out
 /target
 !.mvn/wrapper/maven-wrapper.jar
-.idea/
+.idea
 *.iws
 *.iml
 *.ipr
