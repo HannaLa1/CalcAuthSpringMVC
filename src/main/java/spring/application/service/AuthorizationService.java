@@ -1,17 +1,17 @@
 package spring.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.application.entity.User;
 import spring.application.repository.UserDAO;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class AuthorizationService {
     private final UserDAO userDAO;
 
-    @Autowired
     public AuthorizationService(UserDAO userDAO) {
         this.userDAO = userDAO;
     }

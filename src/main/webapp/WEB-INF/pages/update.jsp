@@ -27,7 +27,7 @@
 
         <tr>
             <td>Password: </td>
-            <td><input type="password" name="password" required></td>
+            <td><input type="password" name="password" value="${sessionScope.user.password}" required></td>
         </tr>
 
         <tr>

@@ -51,7 +51,7 @@
             <th>Action</th>
         </tr>
 
-        <c:forEach var="operation" items="${sessionScope.operationList}">
+        <c:forEach var="operation" items="${operationList}">
             <tr>
                 <td>${operation.id}</td>
                 <td>${operation.userId}</td>
@@ -65,7 +65,7 @@
     </table>
 
     <h1 style="color: deeppink">Authorization done successfully!!!</h1>
-    <h3 style="color: deeppink">Welcome, ${sessionScope.username}!</h3>
+    <h3 style="color: deeppink">Welcome, ${sessionScope.user.userName}!</h3>
     <br/>
 
     <h2>Calculator Page</h2>
@@ -81,7 +81,7 @@
         <input type="submit" name="submit" value="/"/>
         <br/>
         <h2>The result of operation is: ${result}</h2>
-        <h2>USER ID: ${sessionScope.userId}</h2>
+        <h2>USER ID: ${sessionScope.user.id}</h2>
     </form>
 
     <br/>

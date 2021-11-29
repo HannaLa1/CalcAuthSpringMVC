@@ -1,135 +1,55 @@
 package spring.application.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import spring.application.entity.User;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Repository
 public class UserDAO {
-    private final static String INSERT_DATA = "INSERT INTO user(login, password, userName, role) VALUES(?, ?, ?, ?)";
-    private final static String SELECT_DATA = "SELECT * FROM user WHERE login=? AND password=?";
-    private final static String SELECT_ALL_USERS = "SELECT * FROM user";
-    private final static String DELETE_DATA = "DELETE FROM user WHERE userId = ?";
-    private final static String UPDATE = "UPDATE user SET password = ? WHERE userId = ?";
-    private final DBConnection data;
+    private final SessionFactory sessionFactory;
 
-   @Autowired
-    public UserDAO(DBConnection data) {
-        this.data = data;
+    public UserDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public void insertData(User user) {
-        try {
-            PreparedStatement preparedStatement = data.getConnection().prepareStatement(INSERT_DATA);
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getUserName());
-            preparedStatement.setString(4, user.getRole());
-
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        session.save(user);
     }
 
     public User getData(String log, String pass) {
-       User user = null;
+        Session session = sessionFactory.getCurrentSession();
 
-        try{
-            PreparedStatement preparedStatement = data.getConnection().prepareStatement(SELECT_DATA);
-            preparedStatement.setString(1, log);
-            preparedStatement.setString(2, pass);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            user = initializeFieldsOfUser(resultSet);
-
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        try {
+            return session.createQuery("from User where login = :log and password = :pass", User.class)
+                    .setParameter("log", log)
+                    .setParameter("pass", pass)
+                    .getSingleResult();
+        }catch (NoResultException ignored){
+            return null;
         }
-
-        return user;
     }
 
     public void deleteData(int id) {
-        try {
-            PreparedStatement preparedStatement = data.getConnection().prepareStatement(DELETE_DATA);
-
-            preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        User user = session.find(User.class, id);
+        session.delete(user);
     }
 
     public List<User> getAllUsers() {
-        List<User> users = null;
-
-        try{
-            PreparedStatement preparedStatement = data.getConnection().prepareStatement(SELECT_ALL_USERS);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            users = initializeFieldsOfUsers(resultSet);
-
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return users;
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from User").getResultList();
     }
 
     public void update(int id, String password) {
-        try {
-            PreparedStatement preparedStatement =  data.getConnection().prepareStatement(UPDATE);
-            preparedStatement.setString(1, password);
-            preparedStatement.setInt(2, id);
-
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private User initializeFieldsOfUser(ResultSet resultSet) throws SQLException {
-        User user = new User();
-
-        while (resultSet.next()){
-            user.setId(resultSet.getInt("userId"));
-            user.setLogin(resultSet.getString("login"));
-            user.setPassword(resultSet.getString("password"));
-            user.setUserName(resultSet.getString("userName"));
-            user.setRole(resultSet.getString("role"));
-        }
-        return user;
-    }
-
-    private List<User> initializeFieldsOfUsers(ResultSet resultSet) throws SQLException {
-       List<User> users = new ArrayList<>();
-
-        while (resultSet.next()){
-            User user = new User();
-
-            user.setId(resultSet.getInt("userId"));
-            user.setLogin(resultSet.getString("login"));
-            user.setPassword(resultSet.getString("password"));
-            user.setUserName(resultSet.getString("userName"));
-            user.setRole(resultSet.getString("role"));
-
-            users.add(user);
-        }
-        return users;
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("update User set password = :pass where id = :id")
+                .setParameter("pass", password)
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

@@ -1,30 +1,29 @@
 package spring.application.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import spring.application.entity.User;
 import spring.application.service.AuthorizationService;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final AuthorizationService storage;
+    private final AuthorizationService authorizationService;
 
-    @Autowired
-    public AdminController(AuthorizationService storage) {
-        this.storage = storage;
+    public AdminController(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping
-    public String adminPage(HttpSession session){
-        List<User> userList = storage.getAllUsers();
-        session.setAttribute("userList", userList);
+    public ModelAndView adminPage(ModelAndView modelAndView){
+        List<User> userList = authorizationService.getAllUsers();
+        modelAndView.setViewName("admin");
+        modelAndView.addObject("userList", userList);
 
-        return "admin";
+        return modelAndView;
     }
 }

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>Login</title>
@@ -16,11 +17,10 @@
 
     <a href="<c:url value="/"/>">BACK</a><br>
 
-    <form action="<c:url value="/login"/>" method="post">
+    <form action="<c:url value="/login"/>" name="user" method="post">
         <table style="background-color: pink; margin-left: 500px; margin-top: 50px">
             <tr>
                 <td>
-                    <h3 style="color: palevioletred;">${message}</h3>
                     <h3 style="color: palevioletred;">${successMessage}</h3>
                 </td>
                 <td></td>
@@ -40,14 +40,22 @@
 
             <tr>
                 <td>Password: </td>
-                <td><input type="password" name="password1" required></td>
+                <td><input type="password" name="password" required></td>
             </tr>
 
             <tr>
                 <td><input type="submit" name="submit" value="logIn"></td>
-                <td><input type="submit" name="submit" value="registration"></td>
             </tr>
         </table>
+
+        <p><spring:hasBindErrors name="user">
+        <h2>Error caused!</h2>
+            <c:forEach var="error" items="${errors.allErrors}">
+                <b><spring:message message="${error}"/></b>
+                <br/>
+                <br/>
+            </c:forEach>
+        </spring:hasBindErrors></p>
     </form>
 </body>
 </html>

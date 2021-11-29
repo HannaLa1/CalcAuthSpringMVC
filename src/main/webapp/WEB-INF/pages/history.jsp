@@ -54,7 +54,7 @@
             <th>Result</th>
         </tr>
 
-        <c:forEach var="operation" items="${sessionScope.operations}">
+        <c:forEach var="operation" items="${operations}">
             <tr>
                 <td>${operation.id}</td>
                 <td>${operation.userId}</td>

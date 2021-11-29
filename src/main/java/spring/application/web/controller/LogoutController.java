@@ -3,6 +3,7 @@ package spring.application.web.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,8 +12,9 @@ import javax.servlet.http.HttpSession;
 public class LogoutController {
 
     @GetMapping
-    public String logoutPage(HttpSession session){
+    public ModelAndView logoutPage(HttpSession session, ModelAndView modelAndView){
         session.invalidate();
-        return "redirect:/";
+        modelAndView.setViewName("redirect:/");
+        return modelAndView;
     }
 }

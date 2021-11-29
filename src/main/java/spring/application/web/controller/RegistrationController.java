@@ -1,59 +1,56 @@
 package spring.application.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import spring.application.entity.User;
 import spring.application.service.AuthorizationService;
 
+import javax.validation.Valid;
 import java.util.Random;
 
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-    private final AuthorizationService storage;
+    private final AuthorizationService authorizationService;
 
-    @Autowired
-    public RegistrationController(AuthorizationService storage) {
-        this.storage = storage;
+    public RegistrationController(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping
-    public String registrationPage(){
-        return "registration";
+    public ModelAndView registrationPage(ModelAndView modelAndView){
+        modelAndView.setViewName("registration");
+        return modelAndView;
     }
 
     @PostMapping
-    public String registration(@ModelAttribute("login") String login,
-                               @ModelAttribute("password1") String password1,
-                               @ModelAttribute("password2") String password2,
-                               @ModelAttribute("submit") String submitType,
-                               @ModelAttribute("userName") String username,
-                               Model model){
-
-        User user = storage.getData(login, password1);
-
-        if (password1.equals(password2)){
-            if (submitType.equals("registr")) {
-                user.setLogin(login);
-                user.setPassword(password1);
-                user.setUserName(username);
-                user.setRole(String.valueOf(User.Role.values()[new Random().nextInt(User.Role.values().length)]));
-
-                storage.insertData(user);
-
-                model.addAttribute("successMessage", "Registration done successfully, now you can LogIn..");
-                return "login";
-            }
-        }else {
-            model.addAttribute("mess", "Confirm the password again...");
-            return "registration";
+    public ModelAndView registration(@Valid User user, BindingResult bindingResult,
+                                     @ModelAttribute("submit") String submitType,
+                                     ModelAndView modelAndView){
+        if (bindingResult.hasErrors()){
+            modelAndView.setViewName("registration");
+            return modelAndView;
         }
 
-        return "registration";
+        if (submitType.equals("registr")) {
+            user.setRole(String.valueOf(User.Role.values()[new Random().nextInt(User.Role.values().length)]));
+
+            authorizationService.insertData(user);
+
+            modelAndView.setViewName("login");
+            modelAndView.addObject("successMessage", "Registration done successfully, now you can LogIn..");
+            return modelAndView;
+        }else {
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("mess", "Confirm the password again...");
+        }
+
+        modelAndView.setViewName("registration");
+        return modelAndView;
     }
 }

@@ -1,34 +1,33 @@
 package spring.application.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import spring.application.service.AuthorizationService;
 
 @Controller
 @RequestMapping("/update")
 public class UpdateController {
-    private final AuthorizationService storage;
+    private final AuthorizationService authorizationService;
 
-    @Autowired
-    public UpdateController(AuthorizationService storage) {
-        this.storage = storage;
+    public UpdateController(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping("/{id}")
-    public String updatePage(@PathVariable("id") int id, Model model){
-        model.addAttribute("id", id);
-        return "update";
+    public ModelAndView updatePage(@PathVariable("id") int id, ModelAndView modelAndView){
+        modelAndView.setViewName("update");
+        return modelAndView;
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("password") String password,
-                         @ModelAttribute("submit") String submitType){
-        if (submitType.equals("Submit")){
-            storage.update(id, password);
-        }
+    public ModelAndView update(@PathVariable("id") int id, String password, ModelAndView modelAndView){
+        authorizationService.update(id, password);
+        modelAndView.setViewName("redirect:/admin");
 
-        return "redirect:/admin";
+        return modelAndView;
     }
 }

@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import spring.application.entity.Operation;
 import spring.application.repository.OperationDAO;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class CalcService {
     private final OperationDAO operationDAO;
 
@@ -32,24 +34,32 @@ public class CalcService {
         return num1 / num2;
     }
 
-    public double doOperation(double num1, double num2, String operation){
+    public double doOperation(int id, double num1, double num2, String operation){
         double result = 0;
 
         switch (operation) {
-            case "+" ->
+            case "+" ->{
                 result = sum(num1, num2);
-            case "-" ->
+                insertData(new Operation(id, num1, num2, result, operation));
+            }
+            case "-" -> {
                 result = sub(num1, num2);
-            case "*" ->
+                insertData(new Operation(id, num1, num2, result, operation));
+            }
+            case "*" -> {
                 result = mul(num1, num2);
-            case "/" ->
+                insertData(new Operation(id, num1, num2, result, operation));
+            }
+            case "/" -> {
                 result = div(num1, num2);
+                insertData(new Operation(id, num1, num2, result, operation));
+            }
         }
 
         return result;
     }
 
-    public void insertData(Operation operation) {
+    private void insertData(Operation operation) {
         operationDAO.insertData(operation);
     }
 
