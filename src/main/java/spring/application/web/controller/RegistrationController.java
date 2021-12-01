@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import spring.application.entity.Role;
 import spring.application.entity.User;
 import spring.application.service.AuthorizationService;
 
@@ -38,9 +39,9 @@ public class RegistrationController {
         }
 
         if (submitType.equals("registr")) {
-            user.setRole(String.valueOf(User.Role.values()[new Random().nextInt(User.Role.values().length)]));
+            user.setRole(Role.valueOf(String.valueOf(Role.values()[new Random().nextInt(Role.values().length)])));
 
-            authorizationService.insertData(user);
+            authorizationService.save(user);
 
             modelAndView.setViewName("login");
             modelAndView.addObject("successMessage", "Registration done successfully, now you can LogIn..");

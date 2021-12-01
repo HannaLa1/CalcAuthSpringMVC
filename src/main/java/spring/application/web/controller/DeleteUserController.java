@@ -21,8 +21,7 @@ public class DeleteUserController {
 
     @GetMapping("/{id}")
     public ModelAndView deleteUserPage(@PathVariable("id") int id, ModelAndView modelAndView){
-        calcService.deleteByUserId(id);
-        authorizationService.deleteData(id);
+        authorizationService.delete(id);
         modelAndView.setViewName("redirect:/admin");
 
         return modelAndView;

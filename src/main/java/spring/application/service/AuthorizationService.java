@@ -2,7 +2,7 @@ package spring.application.service;
 
 import org.springframework.stereotype.Service;
 import spring.application.entity.User;
-import spring.application.repository.UserDAO;
+import spring.application.repository.JpaUserDao;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -10,29 +10,29 @@ import java.util.List;
 @Service
 @Transactional
 public class AuthorizationService {
-    private final UserDAO userDAO;
+    private final JpaUserDao jpaUserDao;
 
-    public AuthorizationService(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public AuthorizationService(JpaUserDao jpaUserDao) {
+        this.jpaUserDao = jpaUserDao;
     }
 
-    public void insertData(User user) {
-        userDAO.insertData(user);
+    public void save(User user) {
+        jpaUserDao.save(user);
     }
 
-    public User getData(String log, String pass) {
-        return userDAO.getData(log, pass);
+    public User findByLogAndPass(String log, String pass) {
+        return jpaUserDao.findByLogAndPass(log, pass);
     }
 
-    public void deleteData(int id) {
-        userDAO.deleteData(id);
+    public void delete(int id) {
+        jpaUserDao.delete(id);
     }
 
-    public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+    public List<User> findAll() {
+        return jpaUserDao.findAll();
     }
 
     public void update(int id, String password) {
-        userDAO.update(id, password);
+        jpaUserDao.update(id, password);
     }
 }

@@ -1,26 +1,23 @@
 package spring.application.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
-@Component
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
+@NamedQueries({
+        @NamedQuery(name = "User.findByLogAndPass", query = "select User from User where login = :log and password = :pass"),
+        @NamedQuery(name = "User.findAll", query = "select User from User"),
+        @NamedQuery(name = "User.update", query = "update User set password = :pass where id = :id")
+})
 public class User {
+    public User() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="userId")
     private int id;
 
     @Pattern(regexp = "^[a-z](\\.?\\w)*@[a-z]+(\\.[a-z]+)+", message = "The login must start with a letter," +
@@ -35,10 +32,57 @@ public class User {
     @Size(min = 3, max = 10, message = "Username should be between 3 and 15 characters")
     private String userName;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public enum Role{
-        USER,
-        ADMIN
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Operation> operations;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(List<Operation> operations) {
+        this.operations = operations;
     }
 }

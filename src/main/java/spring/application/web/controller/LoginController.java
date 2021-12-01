@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import spring.application.entity.User;
 import spring.application.service.AuthorizationService;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -34,7 +33,7 @@ public class LoginController {
                               @ModelAttribute("submit") String submitType,
                               ModelAndView modelAndView, HttpSession session) {
 
-        User u = authorizationService.getData(user.getLogin(), user.getPassword());
+        User u = authorizationService.findByLogAndPass(user.getLogin(), user.getPassword());
 
         if (bindingResult.hasErrors())
         {

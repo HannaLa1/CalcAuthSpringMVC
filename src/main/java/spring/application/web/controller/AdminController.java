@@ -20,7 +20,7 @@ public class AdminController {
 
     @GetMapping
     public ModelAndView adminPage(ModelAndView modelAndView){
-        List<User> userList = authorizationService.getAllUsers();
+        List<User> userList = authorizationService.findAll();
         modelAndView.setViewName("admin");
         modelAndView.addObject("userList", userList);
 

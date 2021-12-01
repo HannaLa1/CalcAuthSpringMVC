@@ -18,7 +18,7 @@ public class DeleteController {
 
     @GetMapping("/{id}")
     public ModelAndView deletePage(@PathVariable("id") int id, ModelAndView modelAndView){
-        calcService.deleteData(id);
+        //calcService.deleteData(id);
         modelAndView.setViewName("redirect:/calc");
 
         return modelAndView;
