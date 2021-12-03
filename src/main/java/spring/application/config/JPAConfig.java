@@ -2,7 +2,6 @@ package spring.application.config;
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -17,7 +16,6 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("spring.application")
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class JPAConfig {

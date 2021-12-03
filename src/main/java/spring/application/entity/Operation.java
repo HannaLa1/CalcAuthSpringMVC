@@ -1,39 +1,44 @@
 package spring.application.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "operations")
+@NamedQueries({
+        @NamedQuery(name = "Operation.findAll", query = "select o from Operation o where o.user.id = :id"),
+})
 public class Operation {
     public Operation() {
     }
 
+    public Operation(User user, double num1, double num2, String typeOfOperation, double result) {
+        this.user = user;
+        this.num1 = num1;
+        this.num2 = num2;
+        this.typeOfOperation = typeOfOperation;
+        this.result = result;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     private double num1;
 
     private double num2;
 
-    private double result;
-
     private String typeOfOperation;
 
-    public Operation (double num1, double num2, double result, String typeOfOperation) {
-        this.num1 = num1;
-        this.num2 = num2;
-        this.result = result;
-        this.typeOfOperation = typeOfOperation;
-    }
+    private double result;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -53,6 +58,14 @@ public class Operation {
         this.num2 = num2;
     }
 
+    public String getTypeOfOperation() {
+        return typeOfOperation;
+    }
+
+    public void setTypeOfOperation(String typeOfOperation) {
+        this.typeOfOperation = typeOfOperation;
+    }
+
     public double getResult() {
         return result;
     }
@@ -61,11 +74,11 @@ public class Operation {
         this.result = result;
     }
 
-    public String getTypeOfOperation() {
-        return typeOfOperation;
+    public User getUser() {
+        return user;
     }
 
-    public void setTypeOfOperation(String typeOfOperation) {
-        this.typeOfOperation = typeOfOperation;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

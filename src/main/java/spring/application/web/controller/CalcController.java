@@ -24,11 +24,11 @@ public class CalcController {
 
     @GetMapping
     public ModelAndView calcPage(ModelAndView modelAndView, HttpSession session){
-        //int id = (((User) session.getAttribute("user")).getId());
+        long id = (((User) session.getAttribute("user")).getId());
 
-        //List<Operation> operationList = calcService.getData(id);
+        List<Operation> operationList = calcService.findAll(id);
         modelAndView.setViewName("calc");
-        //modelAndView.addObject("operationList", operationList);
+        modelAndView.addObject("operationList", operationList);
 
         return modelAndView;
     }
@@ -36,14 +36,14 @@ public class CalcController {
     @PostMapping
     public ModelAndView calc(Operation op, @ModelAttribute("submit") String operation,
                        ModelAndView modelAndView, HttpSession session){
-       // int id = (((User) session.getAttribute("user")).getId());
+        User user = (User) session.getAttribute("user");
 
-        //double result = calcService.doOperation(id, op.getNum1(), op.getNum2(), operation);
-        //modelAndView.addObject("result", result);
+        double result = calcService.doOperation(user, op.getNum1(), op.getNum2(), operation);
+        modelAndView.addObject("result", result);
 
-       // List<Operation> operationList = calcService.getData(id);
+        List<Operation> operationList = calcService.findAll(user.getId());
         modelAndView.setViewName("calc");
-        //modelAndView.addObject("operationList", operationList);
+        modelAndView.addObject("operationList", operationList);
 
         return modelAndView;
     }

@@ -24,7 +24,7 @@ public class AuthorizationService {
         return jpaUserDao.findByLogAndPass(log, pass);
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         jpaUserDao.delete(id);
     }
 
@@ -32,7 +32,7 @@ public class AuthorizationService {
         return jpaUserDao.findAll();
     }
 
-    public void update(int id, String password) {
+    public void update(long id, String password) {
         jpaUserDao.update(id, password);
     }
 }

@@ -57,7 +57,7 @@
         <c:forEach var="operation" items="${operations}">
             <tr>
                 <td>${operation.id}</td>
-                <td>${operation.userId}</td>
+                <td>${operation.user.id}</td>
                 <td>${operation.num1}</td>
                 <td>${operation.typeOfOperation}</td>
                 <td>${operation.num2}</td>

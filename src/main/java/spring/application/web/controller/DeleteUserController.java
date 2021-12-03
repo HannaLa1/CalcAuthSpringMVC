@@ -12,15 +12,13 @@ import spring.application.service.CalcService;
 @RequestMapping("/deleteUser")
 public class DeleteUserController {
     private final AuthorizationService authorizationService;
-    private final CalcService calcService;
 
-    public DeleteUserController(AuthorizationService authorizationService, CalcService calcService) {
+    public DeleteUserController(AuthorizationService authorizationService) {
         this.authorizationService = authorizationService;
-        this.calcService = calcService;
     }
 
     @GetMapping("/{id}")
-    public ModelAndView deleteUserPage(@PathVariable("id") int id, ModelAndView modelAndView){
+    public ModelAndView deleteUserPage(@PathVariable("id") long id, ModelAndView modelAndView){
         authorizationService.delete(id);
         modelAndView.setViewName("redirect:/admin");
 

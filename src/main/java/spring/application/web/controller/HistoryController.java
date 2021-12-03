@@ -21,9 +21,9 @@ public class HistoryController {
 
     @GetMapping("/{id}")
     public ModelAndView historyPage(@PathVariable("id") int id, ModelAndView modelAndView){
-        //List<Operation> operationList = calcService.getData(id);
+        List<Operation> operationList = calcService.findAll(id);
         modelAndView.setViewName("history");
-        //modelAndView.addObject("operations", operationList);
+        modelAndView.addObject("operations", operationList);
 
         return modelAndView;
     }

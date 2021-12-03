@@ -42,8 +42,8 @@
 <body>
     <table align="right">
         <tr>
-            <th>Operation Id</th>
             <th>User Id</th>
+            <th>Operation Id</th>
             <th>Number 1</th>
             <th>Operation</th>
             <th>Number 2</th>
@@ -53,8 +53,8 @@
 
         <c:forEach var="operation" items="${operationList}">
             <tr>
+                <td>${sessionScope.user.id}</td>
                 <td>${operation.id}</td>
-                <td>${operation.userId}</td>
                 <td>${operation.num1}</td>
                 <td>${operation.typeOfOperation}</td>
                 <td>${operation.num2}</td>

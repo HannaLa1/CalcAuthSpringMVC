@@ -1,7 +1,6 @@
 package spring.application.repository;
 
 import org.springframework.stereotype.Repository;
-import spring.application.entity.Operation;
 import spring.application.entity.User;
 
 import javax.persistence.EntityManager;
@@ -30,7 +29,7 @@ public class JpaUserDao {
         }
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         User user = entityManager.find(User.class, id);
         entityManager.remove(user);
     }
@@ -41,14 +40,10 @@ public class JpaUserDao {
                 .getResultList();
     }
 
-    public void update(int id, String password) {
-        entityManager.createNamedQuery("User.update", User.class)
+    public void update(long id, String password) {
+        entityManager.createNamedQuery("User.update")
                 .setParameter("pass", password)
                 .setParameter("id", id)
                 .executeUpdate();
-    }
-
-    public void saveOperation(Operation operation) {
-        entityManager.persist(operation);
     }
 }

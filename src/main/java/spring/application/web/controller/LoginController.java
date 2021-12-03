@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import spring.application.entity.Role;
 import spring.application.entity.User;
 import spring.application.service.AuthorizationService;
 
@@ -44,9 +45,9 @@ public class LoginController {
         if (submitType.equals("logIn") && u != null && u.getUserName() != null) {
             session.setAttribute("user", u);
 
-            if (u.getRole().equals("ADMIN")) {
+            if (u.getRole().name().equals("ADMIN")) {
                 modelAndView.setViewName("redirect:/admin");
-            } else if (u.getRole().equals("USER")) {
+            } else if (u.getRole().name().equals("USER")) {
                 modelAndView.setViewName("redirect:/calc");
             }
         } else {

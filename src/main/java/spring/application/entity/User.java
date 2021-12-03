@@ -8,8 +8,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "User.findByLogAndPass", query = "select User from User where login = :log and password = :pass"),
-        @NamedQuery(name = "User.findAll", query = "select User from User"),
+        @NamedQuery(name = "User.findByLogAndPass", query = "select u from User u where u.login = :log and u.password = :pass"),
+        @NamedQuery(name = "User.findAll", query = "select u from User u"),
         @NamedQuery(name = "User.update", query = "update User set password = :pass where id = :id")
 })
 public class User {
@@ -18,7 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Pattern(regexp = "^[a-z](\\.?\\w)*@[a-z]+(\\.[a-z]+)+", message = "The login must start with a letter," +
             " all letters are small," +
@@ -35,14 +35,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Operation> operations;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

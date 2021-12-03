@@ -18,13 +18,13 @@ public class UpdateController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView updatePage(@PathVariable("id") int id, ModelAndView modelAndView){
+    public ModelAndView updatePage(@PathVariable("id") long id, ModelAndView modelAndView){
         modelAndView.setViewName("update");
         return modelAndView;
     }
 
     @PostMapping("/{id}")
-    public ModelAndView update(@PathVariable("id") int id, String password, ModelAndView modelAndView){
+    public ModelAndView update(@PathVariable("id") long id, String password, ModelAndView modelAndView){
         authorizationService.update(id, password);
         modelAndView.setViewName("redirect:/admin");
 
